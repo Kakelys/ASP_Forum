@@ -17,9 +17,9 @@ namespace app.Data
             this.context = context;
         }
 
-        public T Insert(T entity) => context.Set<T>().Add(entity).Entity;
+        public T Create(T entity) => context.Set<T>().Add(entity).Entity;
 
-        public void InsertMany(IEnumerable<T> entities) =>
+        public void CreateMany(IEnumerable<T> entities) =>
             context.AddRange(entities);
 
         public void Delete(T entity) => context.Set<T>().Remove(entity);

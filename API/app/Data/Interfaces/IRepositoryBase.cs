@@ -4,10 +4,10 @@ namespace app.Data.Interfaces
 {
     public interface IRepositoryBase<T>
     {
-        IQueryable<T> FindAll(bool asTracking = true);
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool asTracking = true);
-        T Insert(T entity);
-        void InsertMany(IEnumerable<T> entity);
+        IQueryable<T> FindAll(bool asTracking);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool asTracking);
+        T Create(T entity);
+        void CreateMany(IEnumerable<T> entity);
         void Delete(T entity);
 
     }

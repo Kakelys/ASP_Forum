@@ -11,12 +11,43 @@ namespace app.Data
 
         private readonly RepositoryContext _context;
 
+        private IRoleRepository _roleRepository;
+        private IAccountRepository _accountRepository;
+        private ISectionRepository _sectionRepository;
+        private IForumRepository _forumRepository;
+        private ITopicRepository _topicRepository;
+        private IPostRepository _postRepository;
+        private ITokenRepository _tokenRepository;
+
+
         public RepositoryManager(
-            RepositoryContext context
+            RepositoryContext context,
+            IRoleRepository role,
+            IAccountRepository account,
+            ISectionRepository section,
+            IForumRepository forum,
+            ITopicRepository topic,
+            IPostRepository post,
+            ITokenRepository token
         )
         {
             _context = context;
+            _roleRepository = role;
+            _accountRepository = account;
+            _sectionRepository = section;
+            _forumRepository = forum;
+            _topicRepository = topic;
+            _postRepository = post;
+            _tokenRepository = token;
         }
+
+        public IRoleRepository Role => _roleRepository;
+        public IAccountRepository Account => _accountRepository;
+        public ISectionRepository Section => _sectionRepository;
+        public IForumRepository Forum => _forumRepository;
+        public ITopicRepository Topic => _topicRepository;
+        public IPostRepository Post => _postRepository;
+        public ITokenRepository Token => _tokenRepository;
             
 
         public void BeginTransaction() =>
