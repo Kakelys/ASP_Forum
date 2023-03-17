@@ -68,7 +68,8 @@ create table post(
 );
 
 create table token(
-    account_id integer not null primary key constraint pk_token_account_id references account(id),
+    id serial primary key,
+    account_id integer not null constraint fk_token_account_id references account(id),
     token text not null,
     expire_date timestamp not null
 );

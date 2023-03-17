@@ -21,7 +21,7 @@
 
         public virtual Role Role { get; set; } = null!;
 
-        public virtual Token? Token { get; set; }
+        public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
 
         public virtual ICollection<Topic> Topics { get; } = new List<Topic>();
     }

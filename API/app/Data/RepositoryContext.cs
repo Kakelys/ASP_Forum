@@ -126,10 +126,11 @@ public partial class RepositoryContext : DbContext
 
         modelBuilder.Entity<Token>(entity =>
         {
-            entity.HasKey(e => e.AccountId).HasName("token_pkey");
+            entity.HasKey(e => e.Id).HasName("token_pkey");
 
             entity.ToTable("token");
 
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AccountId)
                 .ValueGeneratedNever()
                 .HasColumnName("account_id");
@@ -138,10 +139,10 @@ public partial class RepositoryContext : DbContext
                 .HasColumnName("expire_date");
             entity.Property(e => e.TokenStr).HasColumnName("token");
 
-            entity.HasOne(d => d.Account).WithOne(p => p.Token)
-                .HasForeignKey<Token>(d => d.AccountId)
+            entity.HasOne(d => d.Account).WithMany(p => p.Tokens)
+                .HasForeignKey(d => d.AccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("pk_token_account_id");
+                .HasConstraintName("fk_token_account_id");
         });
 
         modelBuilder.Entity<Topic>(entity =>
