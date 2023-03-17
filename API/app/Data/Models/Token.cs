@@ -4,7 +4,7 @@
     {
         public int AccountId { get; set; }
 
-        public string Token1 { get; set; } = null!;
+        public string TokenStr { get; set; } = null!;
 
         public DateTime ExpireDate { get; set; }
 

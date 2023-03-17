@@ -37,7 +37,6 @@ public partial class RepositoryContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email).HasColumnName("email");
             entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
-            entity.Property(e => e.PasswordSalt).HasColumnName("password_salt");
             entity.Property(e => e.PicturePath).HasColumnName("picture_path");
             entity.Property(e => e.RegisterDate)
                 .HasDefaultValueSql("now()")
@@ -110,7 +109,6 @@ public partial class RepositoryContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
-            entity.Property(e => e.RightLevel).HasColumnName("right_level");
         });
 
         modelBuilder.Entity<Section>(entity =>
@@ -138,7 +136,7 @@ public partial class RepositoryContext : DbContext
             entity.Property(e => e.ExpireDate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("expire_date");
-            entity.Property(e => e.Token1).HasColumnName("token");
+            entity.Property(e => e.TokenStr).HasColumnName("token");
 
             entity.HasOne(d => d.Account).WithOne(p => p.Token)
                 .HasForeignKey<Token>(d => d.AccountId)

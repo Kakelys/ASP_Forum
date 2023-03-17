@@ -11,8 +11,6 @@
 
         public string PasswordHash { get; set; } = null!;
 
-        public string PasswordSalt { get; set; } = null!;
-
         public string? Email { get; set; }
 
         public DateTime? RegisterDate { get; set; }

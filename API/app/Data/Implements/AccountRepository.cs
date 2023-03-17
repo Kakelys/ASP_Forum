@@ -10,6 +10,12 @@ namespace app.Data.Implements
         {
         }
 
+        public Task<Account?> GetByNameAsync(string name, bool asTracking = true) =>
+            FindByCondition(x => x.Username == name, asTracking).FirstOrDefaultAsync();
+
+        public Task<Account?> GetByIdAsync(int id, bool asTracking = true) =>
+            FindByCondition(x => x.Id == id, asTracking).FirstOrDefaultAsync();
+
         public async Task<Account?> GetWithRoleById(int id, bool asTracking = true) =>
             await FindByCondition(x => x.Id == id, asTracking)
             .Include(x => x.Role)

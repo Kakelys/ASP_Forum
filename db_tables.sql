@@ -15,22 +15,20 @@
 -- role right level from 0 to inf (0 is the lowest right level(user))
 create table role (
 	id serial primary key,
-	name text not null,
-	right_level integer not null
+	name text not null
 );
 
-insert into role(right_level, name)
+insert into role(id, name)
 values
-	(0,'user'),
-    (100,'moderator'),
-	(1000,'admin');
+	(0, 'user'),
+    (1, 'moderator'),
+	(2, 'admin');
 
 create table account(
     id serial primary key,
     role_id integer not null constraint fk_account_role_id references role(id),
     username text not null constraint account_username_unique unique,
     password_hash text not null,
-    password_salt text not null,
     email text default null,
     register_date timestamp default now(),
     picture_path text default null
@@ -40,7 +38,7 @@ create table section (
     id serial primary key,
     title text not null,
     order_number integer default 0
-)
+);
 
 create table forum (
     id serial primary key,
