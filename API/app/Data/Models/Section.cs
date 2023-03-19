@@ -6,7 +6,7 @@
 
         public string Title { get; set; } = null!;
 
-        public int? OrderNumber { get; set; }
+        public int OrderNumber { get; set; }
 
         public virtual ICollection<Forum> Forums { get; } = new List<Forum>();
     }
