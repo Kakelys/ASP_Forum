@@ -4,6 +4,9 @@ using app.Middlewares;
 using app.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 
 builder.Services.AddRepositoryService(builder.Configuration);
 builder.Services.AddAuthService(builder.Configuration);
