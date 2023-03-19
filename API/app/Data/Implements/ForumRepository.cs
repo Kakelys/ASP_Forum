@@ -1,5 +1,6 @@
 using app.Data.Interfaces;
 using app.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace app.Data.Implements
 {
@@ -7,6 +8,11 @@ namespace app.Data.Implements
     {
         public ForumRepository(RepositoryContext context) : base(context)
         {
+        }
+
+        public async Task<Forum?> GetByIdAsync(int forumId, bool asTracking = true)
+        {
+            return await FindByCondition(f => f.Id == forumId, asTracking).FirstOrDefaultAsync();
         }
     }
 }

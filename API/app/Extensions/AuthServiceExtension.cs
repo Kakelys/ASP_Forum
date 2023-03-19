@@ -1,4 +1,6 @@
 using System.Text;
+using app.Interfaces;
+using app.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -32,6 +34,8 @@ namespace app.Extensions
                 options.AddPolicy("RequireModeratorRole", policy => policy.RequireRole("moderator"));
                 options.AddPolicy("RequireUserRole", policy => policy.RequireRole("user"));
             });
+
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }
