@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
 {
-    [Route("api/v1/account")]
+    [Route("api/v1/accounts")]
     public class AccountController : BaseApiController
     {
         private IAccountService _accountService;
@@ -14,27 +14,21 @@ namespace app.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterDTO registerDto)
+        public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
-            if(registerDto == null 
-            || string.IsNullOrEmpty(registerDto.Username) 
-            || string.IsNullOrEmpty(registerDto.Password))
-                return BadRequest("Username and password are required");
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             return Ok(await _accountService.Register(registerDto));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginDTO loginDto)
+        public async Task<IActionResult> Login(LoginDTO loginDto)
         {
-            if(loginDto == null 
-            || string.IsNullOrEmpty(loginDto.Username) 
-            || string.IsNullOrEmpty(loginDto.Password))
-                return BadRequest("Username and password are required");
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             return Ok(await _accountService.Login(loginDto));
-        }
-
-        
+        }  
     }
 }
