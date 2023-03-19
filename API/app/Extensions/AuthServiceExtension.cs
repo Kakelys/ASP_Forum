@@ -25,6 +25,14 @@ namespace app.Extensions
                 };
             });
 
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy("RequireAdminOrModeratorRole", policy => policy.RequireRole("admin", "moderator"));
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
+                options.AddPolicy("RequireModeratorRole", policy => policy.RequireRole("moderator"));
+                options.AddPolicy("RequireUserRole", policy => policy.RequireRole("user"));
+            });
+
             return services;
         }
         
