@@ -36,7 +36,7 @@ namespace app.Services
         {
             var fullFilePath = _env.WebRootPath + @"\" + path + @"\" + fileName;
             if(!File.Exists(fullFilePath) || IsFileLocked(fullFilePath))
-                throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError, "File not exists or used by another process");
+                throw new IOException("File is not found or locked");
             
             File.Delete(fullFilePath);
         }

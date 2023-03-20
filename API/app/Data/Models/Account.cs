@@ -15,7 +15,7 @@
 
         public DateTime? RegisterDate { get; set; }
 
-        public string? PicturePath { get; set; }
+        public string? ImagePath { get; set; }
 
         public virtual ICollection<Post> Posts { get; } = new List<Post>();
 

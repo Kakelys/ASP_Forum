@@ -15,7 +15,7 @@ namespace app.Services
     public class TokenService : ITokenService
     {
         private const int ACCESS_TOKEN_EXPIRE_MINUTES = 30;
-        private const int REFRESH_TOKEN_EXPIRE_MINUTES = 60*24*30;  
+        private const int REFRESH_TOKEN_EXPIRE_MINUTES = 60*24*30;  //30 days
         private IConfiguration _config;
         private IRepositoryManager _repository;
 
@@ -31,10 +31,8 @@ namespace app.Services
             if(userForToken == null)
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "Error while generating tokens");
 
-            var accountDto = new AccountDTO(userForToken);
-
-            var accessToken = GenerateToken(accountDto, ACCESS_TOKEN_EXPIRE_MINUTES);
-            var refreshToken = GenerateToken(accountDto, REFRESH_TOKEN_EXPIRE_MINUTES);
+            var accessToken = GenerateToken(userForToken, ACCESS_TOKEN_EXPIRE_MINUTES);
+            var refreshToken = GenerateToken(userForToken, REFRESH_TOKEN_EXPIRE_MINUTES);
 
             var jwtDto = new JwtDTO()
             {
@@ -95,13 +93,13 @@ namespace app.Services
             await _repository.SaveAsync();
         }
 
-        private string GenerateToken(AccountDTO accountDto, int expireTimeMinutes)
+        private string GenerateToken(Account account, int expireTimeMinutes)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, accountDto.Username),
-                new Claim(ClaimTypes.NameIdentifier, accountDto.Id.ToString()),
-                new Claim(ClaimTypes.Role, accountDto.Role.Name)
+                new Claim(ClaimTypes.Name, account.Username),
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new Claim(ClaimTypes.Role, account.Role.Name)
             };
 
             //generate token

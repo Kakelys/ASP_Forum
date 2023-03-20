@@ -8,13 +8,15 @@ namespace app.Services
 {
     public class ForumService : IForumService
     {
-        private IRepositoryManager _repository;
-        private IFileService _fileService;
+        private readonly IRepositoryManager _repository;
+        private readonly IFileService _fileService;
+        private readonly ILogger _logger;
 
-        public ForumService(IRepositoryManager repositoryManager, IFileService fileService)
+        public ForumService(IRepositoryManager repositoryManager, IFileService fileService, ILogger<ForumService> logger)
         {
             _repository = repositoryManager;
             _fileService = fileService;
+            _logger = logger;
         }
 
         public async Task<Forum> Create(ForumDTO forumDto)
@@ -29,7 +31,19 @@ namespace app.Services
             if(forumDto.Image != null && forumDto.Image.Length > 0)
                 entity.ImagePath = await _fileService.SaveFile(forumDto.Image, "images/forums");
 
-            await _repository.SaveAsync();
+            try
+            {
+                await _repository.SaveAsync();
+            }
+            catch(Exception ex)
+            {
+                if(forumDto.Image != null && forumDto.Image.Length > 0)
+                    _fileService.DeleteFile(entity.ImagePath, "images/forums");
+                
+                _logger.LogError(ex, "Error while saving to database");
+                throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError, "Error while saving to database");
+            }
+            
 
             return entity;
         }
@@ -45,7 +59,7 @@ namespace app.Services
 
             if(!string.IsNullOrEmpty(entity.ImagePath))
                 _fileService.DeleteFile(entity.ImagePath, "images/forums");
-
+            
             await _repository.SaveAsync();
         }
 
@@ -67,7 +81,18 @@ namespace app.Services
                 entity.ImagePath = await _fileService.SaveFile(forumDto.Image, "images/forums");
             }
 
-            await _repository.SaveAsync();
+            try
+            {
+                await _repository.SaveAsync();
+            }
+            catch(Exception ex)
+            {
+                if(forumDto.Image != null && forumDto.Image.Length > 0)
+                    _fileService.DeleteFile(entity.ImagePath, "images/forums");
+                
+                _logger.LogError(ex, "Error while saving to database");
+                throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError, "Error while saving to database");
+            }
         }
     }
 }

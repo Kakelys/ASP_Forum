@@ -19,6 +19,7 @@ namespace app.Data.Implements
 
         public async Task<IEnumerable<SectionDetailDTO>> GetDetailAsync()
         {
+            // TODO: add few thousand rows and test this query, if slow - optimize :)
             return await context.Sections
                 .AsNoTracking()
                 .Include(s => s.Forums)
@@ -28,7 +29,6 @@ namespace app.Data.Implements
                 .Select(s => new SectionDetailDTO
                 {
                     Id = s.Id,
-                    Title = s.Title,
                     OrderNumber = s.OrderNumber,
                     Forums = s.Forums
                     .OrderBy(f => f.OrderNumber)
@@ -39,7 +39,23 @@ namespace app.Data.Implements
                         SectionId = f.SectionId,
                         PostsCount = f.Topics.Sum(t => t.Posts.Count),
                         TopicsCount = f.Topics.Count,
-                        ImagePath = f.ImagePath
+                        ImagePath = f.ImagePath,
+                        LastTopic = f.Topics
+                            .OrderByDescending(t => t.CreateDate)
+                            .Select(t => new TopicDTO
+                            {
+                                  Id = t.Id,
+                                ForumId = t.ForumId,
+                                Title = t.Title,
+                                CreateDate = t.CreateDate,
+                                Author = new AuthorDTO
+                                {
+                                    Id = t.AuthorId, 
+                                    Username = t.Author.Username,
+                                    ImagePath = t.Author.ImagePath
+                                }
+                            })
+                            .FirstOrDefault()
                     })
                 }).ToListAsync();
         }

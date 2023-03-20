@@ -7,9 +7,9 @@
 
         public string Content { get; set; } = null!;
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
-        public DateTime? LastEditDate { get; set; }
+        public DateTime LastEditDate { get; set; }
 
         public int AuthorId { get; set; }
 

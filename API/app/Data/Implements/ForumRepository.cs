@@ -1,5 +1,6 @@
 using app.Data.Interfaces;
 using app.Data.Models;
+using app.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Data.Implements

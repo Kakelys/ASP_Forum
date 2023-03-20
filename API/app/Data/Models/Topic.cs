@@ -6,11 +6,11 @@
 
         public string Title { get; set; } = null!;
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
-        public bool? IsPinned { get; set; }
+        public bool IsPinned { get; set; }
 
-        public bool? IsClosed { get; set; }
+        public bool IsClosed { get; set; }
 
         public int AuthorId { get; set; }
 

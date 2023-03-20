@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using app.Interfaces;
 using app.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +7,21 @@ namespace app.Controllers
     [Route("api/v1/forums")]
     public class ForumController : BaseApiController
     {
-        private IForumService _forumService;
+        private readonly IForumService _forumService;
+        private readonly ITopicService _topicService;
 
-        public ForumController(IForumService forumService)
+        public ForumController(IForumService forumService, ITopicService topicService)
         {
             _forumService = forumService;
+            _topicService = topicService;
+        }
+
+        [HttpGet("{id}/pages/{page}")]
+        public async Task<IActionResult> GetPage(int id, int page)
+        {
+            var toTake = Convert.ToInt32(Request.Query["toTake"].FirstOrDefault() ?? "10");
+
+            return Ok(await _topicService.GetByPage(id, page, toTake));
         }
 
         // TODO: Add Authorize
