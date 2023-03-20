@@ -1,5 +1,7 @@
 using app.Interfaces;
 using app.Models.DTOs;
+using app.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
@@ -20,7 +22,8 @@ namespace app.Controllers
             return Ok(await _sectionService.GetAllDetail());
         }
 
-        // TODO: Add Authorize
+        [Authorize]
+        [AuthorizeRoles(Role.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create(SectionDTO sectionDto)
         {
@@ -31,7 +34,8 @@ namespace app.Controllers
             return NoContent();
         }
 
-        // TODO: Add Authorize
+        [Authorize]
+        [AuthorizeRoles(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -39,7 +43,8 @@ namespace app.Controllers
             return NoContent();
         }
         
-        // TODO: Add Authorize
+        [Authorize]
+        [AuthorizeRoles(Role.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, SectionDTO sectionDto)
         {

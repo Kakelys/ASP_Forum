@@ -1,5 +1,8 @@
+using System.Net;
 using app.Interfaces;
 using app.Models.DTOs;
+using app.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
@@ -24,7 +27,8 @@ namespace app.Controllers
             return Ok(await _topicService.GetByPage(id, page, toTake));
         }
 
-        // TODO: Add Authorize
+        [Authorize]
+        [AuthorizeRoles(Role.Admin, Role.Moderator)]
         [HttpPost]
         public async Task<IActionResult> AddForum([FromForm] ForumDTO forumDto)
         {
@@ -34,6 +38,8 @@ namespace app.Controllers
             return Ok(await _forumService.Create(forumDto));
         }
 
+        [Authorize]
+        [AuthorizeRoles(Role.Admin, Role.Moderator)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateForum(int id, [FromForm] ForumDTO forumDto)
         {
@@ -44,6 +50,8 @@ namespace app.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [AuthorizeRoles(Role.Admin, Role.Moderator)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteForum(int id)
         {

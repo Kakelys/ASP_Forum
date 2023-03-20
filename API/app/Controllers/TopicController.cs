@@ -15,8 +15,7 @@ namespace app.Controllers
         {
             _topicService = topicService;
         }
-
-        // TODO: Add Authorize 
+ 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTopic(int id)
         {
