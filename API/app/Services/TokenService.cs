@@ -34,18 +34,12 @@ namespace app.Services
             var accessToken = GenerateToken(userForToken, ACCESS_TOKEN_EXPIRE_MINUTES);
             var refreshToken = GenerateToken(userForToken, REFRESH_TOKEN_EXPIRE_MINUTES);
 
-            var jwtDto = new JwtDTO()
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            };
-
+            var jwtDto = new JwtDTO(accessToken, refreshToken);
             return jwtDto;
         }
 
         public async Task SaveNewRefreshToken(int accountId, string refreshToken)
         {
-
             var token = new Token()
             {
                 AccountId = accountId,
@@ -59,17 +53,14 @@ namespace app.Services
 
         public async Task<JwtDTO> RefreshAsync(string refreshToken)
         {
-            //generate new access token
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(refreshToken);
 
             var accountId = int.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
 
-            var token = await _repository.Token.GetToken(accountId, refreshToken);
+            var token = await _repository.Token.GetTokenAsync(accountId, refreshToken);
             if(token == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid refresh token");
-
-            //get user with roles for generate tokens
 
             var jwtDto = await GenerateAsync(accountId);
 
@@ -83,9 +74,9 @@ namespace app.Services
             throw new NotImplementedException();
         }
 
-        public async Task Revoke(int userId, string refreshToken)
+        public async Task RevokeAsync(string refreshToken)
         {
-            var token = await _repository.Token.GetToken(userId, refreshToken);
+            var token = await _repository.Token.GetTokenAsync(refreshToken);
             if(token == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid refresh token");
 

@@ -7,6 +7,6 @@ namespace app.Interfaces
         Task<JwtDTO> GenerateAsync(int accountId);
         Task<JwtDTO> RefreshAsync(string refreshToken);
         Task SaveNewRefreshToken(int accountId, string refreshToken);
-        Task Revoke(int accountId,string refreshToken);
+        Task RevokeAsync(string refreshToken);
     }
 }
