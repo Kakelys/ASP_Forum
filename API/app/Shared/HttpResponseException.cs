@@ -6,7 +6,7 @@ namespace app.Shared
     {
         public HttpStatusCode StatusCode { get;private set; }
 
-        public HttpResponseException(HttpStatusCode statusCode, string message) 
+        public HttpResponseException(HttpStatusCode statusCode, string? message) 
             : base(message ?? "Something went wrong")
         {
             StatusCode = statusCode;

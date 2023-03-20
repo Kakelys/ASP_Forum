@@ -37,7 +37,7 @@ public partial class RepositoryContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email).HasColumnName("email");
             entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
-            entity.Property(e => e.PicturePath).HasColumnName("picture_path");
+            entity.Property(e => e.ImagePath).HasColumnName("image_path");
             entity.Property(e => e.RegisterDate)
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
