@@ -97,7 +97,7 @@ public partial class RepositoryContext : DbContext
 
             entity.HasOne(d => d.Topic).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.TopicId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_post_topic_id");
         });
 

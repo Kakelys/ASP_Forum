@@ -13,6 +13,7 @@
 */
 
 -- role right level from 0 to inf (0 is the lowest right level(user))
+
 create table role (
 	id serial primary key,
 	name text not null
@@ -64,7 +65,7 @@ create table post(
     create_date timestamp default now(),
     last_edit_date timestamp default now(),
     author_id integer not null constraint fk_post_author_id references account(id),
-    topic_id integer not null constraint fk_post_topic_id references topic(id)
+    topic_id integer not null constraint fk_post_topic_id references topic(id) on delete cascade
 );
 
 create table token(
