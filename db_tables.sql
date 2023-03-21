@@ -31,7 +31,7 @@ create table account(
     password_hash text not null,
     email text default null,
     register_date timestamp default now(),
-    picture_path text default null
+    image_path text default null
 );
 
 create table section (
