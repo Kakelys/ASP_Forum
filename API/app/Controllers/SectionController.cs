@@ -27,9 +27,6 @@ namespace app.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SectionDTO sectionDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _sectionService.Create(sectionDto);
             return NoContent();
         }
@@ -48,9 +45,6 @@ namespace app.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, SectionDTO sectionDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _sectionService.Update(id, sectionDto);
             return NoContent();
         }

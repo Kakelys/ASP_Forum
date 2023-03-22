@@ -21,9 +21,6 @@ namespace app.Controllers
         [HttpPost]
         public async Task<IActionResult> AddForum([FromForm] ForumDTO forumDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             return Ok(await _forumService.Create(forumDto));
         }
 
@@ -32,9 +29,6 @@ namespace app.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateForum(int id, [FromForm] ForumDTO forumDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _forumService.Update(id, forumDto);
             return NoContent();
         }

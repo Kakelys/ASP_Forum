@@ -16,18 +16,12 @@ namespace app.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             return Ok(await _accountService.Register(registerDto));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO loginDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             return Ok(await _accountService.Login(loginDto));
         }  
     }

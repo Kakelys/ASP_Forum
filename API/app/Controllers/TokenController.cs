@@ -17,18 +17,12 @@ namespace app.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(JwtDTO jwtDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             return Ok(await _tokenService.RefreshAsync(jwtDto.RefreshToken));
         }
 
         [HttpPost("revoke")]
         public async Task<IActionResult> Revoke(JwtDTO jwtDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _tokenService.RevokeAsync(jwtDto.RefreshToken);
             return NoContent();
         }

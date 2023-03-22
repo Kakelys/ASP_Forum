@@ -17,7 +17,7 @@ namespace app.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPage(PageDTO pageDto)
+        public async Task<IActionResult> GetPage([FromQuery] PageDTO pageDto)
         {            
             return Ok(await _topicService.GetByPage(pageDto.Id, pageDto.Page, pageDto.Take));
         }
@@ -32,9 +32,6 @@ namespace app.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTopic(TopicCreateDTO topicDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _topicService.Create(topicDto);
             return NoContent();
         }
@@ -43,9 +40,6 @@ namespace app.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTopic(TopicDTO topicDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _topicService.Update(HttpContext.GetUserId(), topicDto);
             return NoContent();
         }
