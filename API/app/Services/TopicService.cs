@@ -9,26 +9,43 @@ namespace app.Services
     public class TopicService : ITopicService
     {
         private readonly IRepositoryManager _repositoryManager;
-        private readonly IConfiguration _config;
 
         public TopicService(IRepositoryManager repositoryManager, IConfiguration config)
         {
             _repositoryManager = repositoryManager;
-            _config = config;
         }
 
-        public async Task Create(TopicDTO topicDto)
+        public async Task Create(TopicCreateDTO topicDto)
         {
+            await _repositoryManager.BeginTransactionAsync();
             var topic = new Topic
             {
                 Title = topicDto.Title,
                 ForumId = topicDto.ForumId,
-                AuthorId = topicDto.Author.Id,
+                AuthorId = topicDto.AuthorId,
             };
 
-            _repositoryManager.Topic.Create(topic);
+            try{
+                var entity = _repositoryManager.Topic.Create(topic);
+                await _repositoryManager.SaveAsync();
 
-            await _repositoryManager.SaveAsync();
+                var post = new Post
+                {
+                    Content = topicDto.Content,
+                    AuthorId = topicDto.AuthorId,
+                    TopicId = entity.Id
+                };
+
+                _repositoryManager.Post.Create(post);
+
+                await _repositoryManager.SaveAsync();
+                await _repositoryManager.CommitAsync();
+            }
+            catch(Exception ex)
+            {
+                await _repositoryManager.RollbackAsync();
+                throw ex;
+            }
         }
 
         public async Task Update(int senderId, TopicDTO topicDto)
@@ -38,7 +55,7 @@ namespace app.Services
             await CheckUserPermission(senderId, entity.AuthorId);
 
             if(entity.IsClosed && topicDto.IsClosed == true)
-                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, _config["Messages:Topic:Closed"]);
+                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, "Topic is closed");
 
             entity.Title = topicDto.Title ?? entity.Title;
             entity.IsClosed = topicDto.IsClosed;
@@ -75,22 +92,23 @@ namespace app.Services
         private void CheckTopicIsNull(object? obj)
         {
             if(obj == null)
-                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, _config["Messages:Topic:NotFound"]);
+                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, "Topic not found");
         }
 
         private async Task CheckUserPermission(int senderId, int topicAuthorId)
         {
+            var message =  "You are not permitted to do this";
             var user = await _repositoryManager.Account.GetWithRoleById(senderId, false);
             if(user == null)
-                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, _config["Messages:Topic:Forbidden"]);
+                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, message);
 
-            var adminRoles = _config.GetSection("Permissions:Topic").Get<List<string>>() ?? new List<string>();
+            var adminRoles = Shared.Role.GenerateRoleList(Shared.Role.Admin, Shared.Role.Moderator);
 
             if(adminRoles.Contains(user.Role.Name))
                 return;
 
             if(senderId != topicAuthorId)
-                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, _config["Messages:Topic:Forbidden"]);
+                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, message);
         }   
     }
 }

@@ -30,7 +30,7 @@ namespace app.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddTopic(TopicDTO topicDto)
+        public async Task<IActionResult> AddTopic(TopicCreateDTO topicDto)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
