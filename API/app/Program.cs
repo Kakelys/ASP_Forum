@@ -18,6 +18,7 @@ builder.Services.AddScoped<ISectionService, SectionService>();
 builder.Services.AddScoped<IForumService, ForumService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<ITopicService, TopicService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddControllers();
 
