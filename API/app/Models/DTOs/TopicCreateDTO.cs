@@ -4,8 +4,6 @@ namespace app.Models.DTOs
 {
     public class TopicCreateDTO
     {
-        [Range(1, int.MaxValue, ErrorMessage = "Valid topic id is required")]
-        public int AuthorId { get; set; }
         [Required]
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 100 characters")]
         public string Title { get; set; }

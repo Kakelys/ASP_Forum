@@ -32,7 +32,7 @@ namespace app.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTopic(TopicCreateDTO topicDto)
         {
-            await _topicService.Create(topicDto);
+            await _topicService.Create(HttpContext.GetUserId(), topicDto);
             return NoContent();
         }
 

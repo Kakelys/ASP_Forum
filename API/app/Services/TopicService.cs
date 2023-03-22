@@ -9,20 +9,22 @@ namespace app.Services
     public class TopicService : ITopicService
     {
         private readonly IRepositoryManager _repositoryManager;
+        private readonly IPermissionCheckerService _permCheckerService;
 
-        public TopicService(IRepositoryManager repositoryManager, IConfiguration config)
+        public TopicService(IRepositoryManager repositoryManager, IPermissionCheckerService permissionCheckerService)
         {
             _repositoryManager = repositoryManager;
+            _permCheckerService = permissionCheckerService;
         }
 
-        public async Task Create(TopicCreateDTO topicDto)
+        public async Task Create(int senderId, TopicCreateDTO topicDto)
         {
             await _repositoryManager.BeginTransactionAsync();
             var topic = new Topic
             {
                 Title = topicDto.Title,
                 ForumId = topicDto.ForumId,
-                AuthorId = topicDto.AuthorId,
+                AuthorId = senderId,
             };
 
             try{
@@ -32,7 +34,7 @@ namespace app.Services
                 var post = new Post
                 {
                     Content = topicDto.Content,
-                    AuthorId = topicDto.AuthorId,
+                    AuthorId = senderId,
                     TopicId = entity.Id
                 };
 
@@ -52,7 +54,7 @@ namespace app.Services
         {
             var entity = await _repositoryManager.Topic.GetByIdAsync(topicDto.Id, true);
             CheckTopicIsNull(entity);
-            await CheckUserPermission(senderId, entity.AuthorId);
+            await _permCheckerService.CheckUserPermission(senderId, entity.AuthorId, null, Shared.Role.Admin, Shared.Role.Admin);
 
             if(entity.IsClosed && topicDto.IsClosed == true)
                 throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, "Topic is closed");
@@ -69,7 +71,7 @@ namespace app.Services
         {
             var entity = await _repositoryManager.Topic.GetByIdAsync(topicId, false);
             CheckTopicIsNull(entity);
-            await CheckUserPermission(senderId, entity.AuthorId);
+            await _permCheckerService.CheckUserPermission(senderId, entity.AuthorId, null, Shared.Role.Admin, Shared.Role.Admin);
 
             _repositoryManager.Topic.Delete(entity);
 
@@ -94,21 +96,5 @@ namespace app.Services
             if(obj == null)
                 throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest, "Topic not found");
         }
-
-        private async Task CheckUserPermission(int senderId, int topicAuthorId)
-        {
-            var message =  "You are not permitted to do this";
-            var user = await _repositoryManager.Account.GetWithRoleById(senderId, false);
-            if(user == null)
-                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, message);
-
-            var adminRoles = Shared.Role.GenerateRoleList(Shared.Role.Admin, Shared.Role.Moderator);
-
-            if(adminRoles.Contains(user.Role.Name))
-                return;
-
-            if(senderId != topicAuthorId)
-                throw new HttpResponseException(System.Net.HttpStatusCode.Forbidden, message);
-        }   
     }
 }

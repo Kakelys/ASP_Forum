@@ -4,7 +4,7 @@ namespace app.Interfaces
 {
     public interface ITopicService
     {
-        Task Create(TopicCreateDTO topicDto);
+        Task Create(int senderId, TopicCreateDTO topicDto);
         Task Update(int senderId, TopicDTO topicDto);
         Task Delete(int senderId, int topicId);
         Task<TopicDetailDTO> GetWithFirstPost(int topicId);
