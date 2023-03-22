@@ -15,11 +15,17 @@ namespace app.Controllers
         {
             _topicService = topicService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPage(PageDTO pageDto)
+        {            
+            return Ok(await _topicService.GetByPage(pageDto.Id, pageDto.Page, pageDto.Take));
+        }
  
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTopic(int id)
         {
-            return Ok(_topicService.GetById(id));
+            return Ok(_topicService.GetWithFirstPost(id));
         }
 
         [Authorize]

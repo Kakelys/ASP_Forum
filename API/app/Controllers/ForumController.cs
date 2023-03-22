@@ -1,4 +1,3 @@
-using System.Net;
 using app.Interfaces;
 using app.Models.DTOs;
 using app.Shared;
@@ -11,20 +10,10 @@ namespace app.Controllers
     public class ForumController : BaseApiController
     {
         private readonly IForumService _forumService;
-        private readonly ITopicService _topicService;
 
         public ForumController(IForumService forumService, ITopicService topicService)
         {
             _forumService = forumService;
-            _topicService = topicService;
-        }
-
-        [HttpGet("{id}/pages/{page}")]
-        public async Task<IActionResult> GetPage(int id, int page)
-        {
-            var toTake = Convert.ToInt32(Request.Query["toTake"].FirstOrDefault() ?? "10");
-
-            return Ok(await _topicService.GetByPage(id, page, toTake));
         }
 
         [Authorize]

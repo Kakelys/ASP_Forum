@@ -59,9 +59,9 @@ namespace app.Services
             await _repositoryManager.SaveAsync();
         }
 
-        public async Task<TopicDTO> GetById(int topicId)
+        public async Task<TopicDetailDTO> GetWithFirstPost(int topicId)
         {
-            var entity = await _repositoryManager.Topic.GetDtoByIdAsync(topicId);
+            var entity = await _repositoryManager.Topic.GetWithFirstPostAsync(topicId);
             CheckTopicIsNull(entity);
 
             return entity;

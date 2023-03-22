@@ -12,9 +12,11 @@ namespace app.Data.Implements
             
         }
 
-        public async Task<TopicDTO?> GetDtoByIdAsync(int topicId, bool asTracking = true){
+        public async Task<TopicDetailDTO?> GetWithFirstPostAsync(int topicId, bool asTracking = true){
             return await FindByCondition(t => t.Id == topicId, asTracking)
-            .Include(t => t.Posts).Select(t => new TopicDTO{
+            .Include(t => t.Posts)
+            .ThenInclude(p => p.Author)
+            .Select(t => new TopicDetailDTO{
                 Id = t.Id,
                 ForumId = t.ForumId,
                 Title = t.Title,
@@ -24,7 +26,22 @@ namespace app.Data.Implements
                     Id = t.AuthorId,
                     Username = t.Author.Username,
                     ImagePath = t.Author.ImagePath
-                }
+                },
+                FirstPost = t.Posts
+                    .OrderBy(p => p.CreateDate)
+                    .Select(p => new PostDTO
+                    {
+                        Id = p.Id,
+                        TopicId = p.TopicId,
+                        Content = p.Content,
+                        CreateDate = p.CreateDate,
+                        Author = new AuthorDTO
+                        {
+                            Id = p.AuthorId,
+                            Username = p.Author.Username,
+                            ImagePath = p.Author.ImagePath
+                        }
+                    }).FirstOrDefault()
             }).FirstOrDefaultAsync();
         }        
 

@@ -6,7 +6,7 @@ namespace app.Data.Interfaces
     public interface ITopicRepository : IRepositoryBase<Topic>
     {
         Task<IEnumerable<TopicDetailDTO>> GetByPageAsync(int page, int amountToTake, int forumId);
-        Task<TopicDTO?> GetDtoByIdAsync(int topicId, bool asTracking = true);
+        Task<TopicDetailDTO?> GetWithFirstPostAsync(int topicId, bool asTracking = true);
         Task<Topic?> GetByIdAsync(int topicId, bool asTracking = true);
     }
 }
