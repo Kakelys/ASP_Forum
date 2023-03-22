@@ -11,6 +11,8 @@ builder.Logging.AddConsole();
 builder.Services.AddRepositoryService(builder.Configuration);
 builder.Services.AddAuthService(builder.Configuration);
 
+builder.Services.AddScoped<IPermissionCheckerService, PermissionCheckerService>();
+
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ISectionService, SectionService>();
 builder.Services.AddScoped<IForumService, ForumService>();
