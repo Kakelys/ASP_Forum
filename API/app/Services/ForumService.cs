@@ -37,7 +37,7 @@ namespace app.Services
             }
             catch(Exception ex)
             {
-                if(forumDto.Image != null && forumDto.Image.Length > 0)
+                if(forumDto.Image != null && forumDto.Image.Length > 0 && !string.IsNullOrEmpty(entity.ImagePath))
                     _fileService.DeleteFile(entity.ImagePath, "images/forums");
                 
                 _logger.LogError(ex, "Error while saving to database");

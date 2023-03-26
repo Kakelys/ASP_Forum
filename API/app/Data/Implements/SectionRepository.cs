@@ -29,6 +29,7 @@ namespace app.Data.Implements
                 .Select(s => new SectionDetailDTO
                 {
                     Id = s.Id,
+                    Title = s.Title,
                     OrderNumber = s.OrderNumber,
                     Forums = s.Forums
                     .OrderBy(f => f.OrderNumber)
@@ -37,14 +38,14 @@ namespace app.Data.Implements
                         Id = f.Id,
                         Title = f.Title,
                         SectionId = f.SectionId,
-                        PostsCount = f.Topics.Sum(t => t.Posts.Count),
-                        TopicsCount = f.Topics.Count,
+                        PostCount = f.Topics.Sum(t => t.Posts.Count),
+                        TopicCount = f.Topics.Count,
                         ImagePath = f.ImagePath,
                         LastTopic = f.Topics
                             .OrderByDescending(t => t.CreateDate)
                             .Select(t => new TopicDTO
                             {
-                                  Id = t.Id,
+                                Id = t.Id,
                                 ForumId = t.ForumId,
                                 Title = t.Title,
                                 CreateDate = t.CreateDate,

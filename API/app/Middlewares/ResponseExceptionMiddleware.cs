@@ -22,10 +22,10 @@ namespace app.Middlewares
             catch (HttpResponseException ex)
             {
                 _logger.LogWarning(
-                    @$"Http Response Exception:
-                    \r\nmessage: {ex.Message} 
-                    \r\nurl: {context.Request.Path}
-                    \r\nmethod:{context.Request.Method}"
+                    $"Http Response Exception:" +
+                    $"\r\nmessage: {ex.Message} " +
+                    $"\r\nurl: {context.Request.Path}" +
+                    $"\r\nmethod:{context.Request.Method}"
                 );
 
                 context.Response.ContentType = "application/json";

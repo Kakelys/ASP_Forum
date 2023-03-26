@@ -58,14 +58,17 @@ namespace app.Services
 
             var accountId = int.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
 
-            var token = await _repository.Token.GetTokenAsync(accountId, refreshToken);
-            if(token == null)
+            var tokenEntity = await _repository.Token.GetTokenAsync(accountId, refreshToken);
+            if(tokenEntity == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid refresh token");
+
+            if(tokenEntity.ExpireDate < DateTime.Now)
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Refresh token expired");
 
             var jwtDto = await GenerateAsync(accountId);
 
-            token.TokenStr = jwtDto.RefreshToken;
-            token.ExpireDate = DateTime.Now.AddMinutes(REFRESH_TOKEN_EXPIRE_MINUTES);
+            tokenEntity.TokenStr = jwtDto.RefreshToken;
+            tokenEntity.ExpireDate = DateTime.Now.AddMinutes(REFRESH_TOKEN_EXPIRE_MINUTES);
 
             await _repository.SaveAsync();
 
