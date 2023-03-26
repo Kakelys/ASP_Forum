@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Net;
 using app.Data.Interfaces;
 using app.Interfaces;
@@ -5,6 +6,7 @@ using app.Models.DTOs;
 using app.Shared;
 using System.Security.Cryptography;
 using app.Data.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace app.Services
 {
@@ -27,10 +29,11 @@ namespace app.Services
             if(!CheckHash(loginDto.Password, user.PasswordHash))
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Password is incorrect");
 
+            // TODO: maybe generate token only if user already has tokens.Count < 6
             var tokenDto = await _tokenService.GenerateAsync(user.Id);
             await _tokenService.SaveNewRefreshToken(user.Id, tokenDto.RefreshToken);
 
-            return new UserDTO(user.Username, tokenDto);
+            return new UserDTO(user, tokenDto);
         }
 
         public async Task<UserDTO> Register(RegisterDTO registerDto)
@@ -48,7 +51,7 @@ namespace app.Services
             };
             
             //save to db
-            _repository.Account.Create(user);
+            var newUser = _repository.Account.Create(user);
             await _repository.SaveAsync();
 
             //generate tokens
@@ -56,7 +59,21 @@ namespace app.Services
             await _tokenService.SaveNewRefreshToken(user.Id, tokenDto.RefreshToken);
 
             //return UserDTO
-            return new UserDTO(registerDto.Username, tokenDto);
+            return new UserDTO(newUser, tokenDto);
+        }
+
+        public async Task<UserDTO> LoginWithToken(string refreshToken)
+        {
+            var jwt = await _tokenService.RefreshAsync(refreshToken);
+
+            var token = new JwtSecurityTokenHandler().ReadJwtToken(refreshToken);
+            var userId = token.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            var user = await _repository.Account.GetByIdAsync(int.Parse(userId));
+            if(user == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "User doesn't exist");
+
+            return new UserDTO(user, jwt);
         }
 
         private string HashPassword(string password)

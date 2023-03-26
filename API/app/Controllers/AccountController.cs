@@ -1,5 +1,8 @@
+using System.Net;
+using app.Extensions;
 using app.Interfaces;
 using app.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
@@ -23,6 +26,12 @@ namespace app.Controllers
         public async Task<IActionResult> Login(LoginDTO loginDto)
         {
             return Ok(await _accountService.Login(loginDto));
-        }  
+        }
+
+        [HttpGet("auth")]
+        public async Task<IActionResult> AuthByToken([FromQuery] string refreshToken)
+        {
+            return Ok(await _accountService.LoginWithToken(refreshToken));
+        }    
     }
 }

@@ -6,6 +6,6 @@ namespace app.Interfaces
     {
         Task<UserDTO> Register(RegisterDTO registerDto);
         Task<UserDTO> Login(LoginDTO registerDto);
-        
+        Task<UserDTO> LoginWithToken(string refreshToken);
     }
 }
