@@ -22,6 +22,9 @@ builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors();
+    
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSwaggerGen();
@@ -29,6 +32,13 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 app.UseStaticFiles();
+
+app.UseCors(opts => 
+{
+    opts.AllowAnyOrigin();
+    opts.AllowAnyMethod();
+    opts.AllowAnyHeader();    
+});
 
 app.UseMiddleware<ResponseExceptionMiddleware>();
 
