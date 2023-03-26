@@ -1,0 +1,47 @@
+<div class="container d-flex align-items-center justify-content-center">
+  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
+    <div class="form-group">
+      <label for="username">Login</label>
+      <input
+        type="text"
+        id="username"
+        type="text"
+        class="form-control"
+        ngModel
+        name="username"
+        required
+        minlength="3"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="text"
+        id="password"
+        type="password"
+        class="form-control"
+        ngModel
+        name="password"
+        required
+        minlength="8"
+      />
+    </div>
+    <div class="mt-2">
+      <button
+        class="btn btn-primary me-3"
+        type="submit"
+        [disabled]="!authForm.valid"
+      >
+        {{ isLogin ? "Login" : "Register" }}
+      </button>
+
+      <a (click)="onSwitchMode()" class="link" *ngIf="isLogin"
+        >Already have an account?</a
+      >
+      <a (click)="onSwitchMode()" class="link" *ngIf="!isLogin"
+        >Create new account</a
+      >
+    </div>
+  </form>
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+</div>
