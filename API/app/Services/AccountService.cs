@@ -29,8 +29,7 @@ namespace app.Services
             if(!CheckHash(loginDto.Password, user.PasswordHash))
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Password is incorrect");
 
-            // TODO: maybe generate token only if user already has tokens.Count < 6
-            var tokenDto = await _tokenService.GenerateAsync(user.Id);
+            var tokenDto = await _tokenService.Generate(user.Id);
             await _tokenService.SaveNewRefreshToken(user.Id, tokenDto.RefreshToken);
 
             return new UserDTO(user, tokenDto);
@@ -55,7 +54,7 @@ namespace app.Services
             await _repository.SaveAsync();
 
             //generate tokens
-            var tokenDto = await _tokenService.GenerateAsync(user.Id);
+            var tokenDto = await _tokenService.Generate(user.Id);
             await _tokenService.SaveNewRefreshToken(user.Id, tokenDto.RefreshToken);
 
             //return UserDTO
@@ -64,7 +63,7 @@ namespace app.Services
 
         public async Task<UserDTO> LoginWithToken(string refreshToken)
         {
-            var jwt = await _tokenService.RefreshAsync(refreshToken);
+            var jwt = await _tokenService.Refresh(refreshToken);
 
             var token = new JwtSecurityTokenHandler().ReadJwtToken(refreshToken);
             var userId = token.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;

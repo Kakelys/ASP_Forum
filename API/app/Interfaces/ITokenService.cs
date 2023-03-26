@@ -4,9 +4,9 @@ namespace app.Interfaces
 {
     public interface ITokenService
     {
-        Task<JwtDTO> GenerateAsync(int accountId);
-        Task<JwtDTO> RefreshAsync(string refreshToken);
+        Task<JwtDTO> Generate(int accountId);
+        Task<JwtDTO> Refresh(string refreshToken);
         Task SaveNewRefreshToken(int accountId, string refreshToken);
-        Task RevokeAsync(string refreshToken);
+        Task Revoke(string refreshToken);
     }
 }

@@ -17,13 +17,13 @@ namespace app.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(JwtDTO jwtDto)
         {
-            return Ok(await _tokenService.RefreshAsync(jwtDto.RefreshToken));
+            return Ok(await _tokenService.Refresh(jwtDto.RefreshToken));
         }
 
         [HttpPost("revoke")]
         public async Task<IActionResult> Revoke(JwtDTO jwtDto)
         {
-            await _tokenService.RevokeAsync(jwtDto.RefreshToken);
+            await _tokenService.Revoke(jwtDto.RefreshToken);
             return NoContent();
         }
     }
