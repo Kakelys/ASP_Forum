@@ -28,13 +28,16 @@ export class AuthInterceptorService implements HttpInterceptor {
     return next.handle(modifiedReq).pipe(
       catchError((err) => {
 
-        // If it's Unauthorized try to refresh the token
+        // If it's Unauthorized try to refresh tokens and resend request
         if(err instanceof HttpErrorResponse && err.status === 401) {
           if(!localStorage.getItem('refresh-token')) {
             return throwError(err);
           }
 
-          this.authService.autoLogin();
+          var tmp = this.authService.autoLogin().subscribe({
+            next: _ => {return next.handle(modifiedReq)},
+            error: _ => {return throwError(new Error('Failed to login'))}
+          });
         }
 
         return throwError(err);

@@ -2,7 +2,7 @@ import { Author } from '../../shared/author.model';
 import { AuthResponse } from '../../shared/auth-response.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -41,13 +41,15 @@ export class AuthService {
     let params = new HttpParams();
     params = params.append('refreshToken', refreshToken);
 
-    this.http
+    return this.http
       .get<AuthResponse>(this.baseUrl + '/auth', { params: params })
-      .subscribe({
-        next: (res) => {
-          if (res) this.setAuth(res);
-        }
-      });
+      .pipe(
+        map((data) => {
+          if (data) this.setAuth(data);
+
+          return data;
+        })
+      );
   }
 
   logout() {
