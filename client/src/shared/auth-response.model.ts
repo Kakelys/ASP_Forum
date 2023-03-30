@@ -1,5 +1,6 @@
-import { Author } from './author.model';
+import { User } from './user.model';
 export interface AuthResponse {
-  user: Author;
+  user: User;
+  role: string;
   jwt: { accessToken: string; refreshToken: string };
 }

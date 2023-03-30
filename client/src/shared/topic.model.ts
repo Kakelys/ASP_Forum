@@ -1,4 +1,4 @@
-import { Author } from "./author.model";
+import { User } from "./user.model";
 
 export interface Topic {
   id: number;
@@ -7,5 +7,5 @@ export interface Topic {
   isPinned: boolean;
   isClosed: boolean;
   createDate: Date;
-  author: Author;
+  author: User;
 }

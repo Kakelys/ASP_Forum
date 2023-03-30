@@ -3,25 +3,37 @@
     <div class="div">
       <a class="navbar-brand mb-0 h5" routerLink="/main">Forum</a>
     </div>
-    <button type="button" class="navbar-toggler" (click)="collapsed = !collapsed">
+    <button
+      type="button"
+      class="navbar-toggler"
+      (click)="collapsed = !collapsed"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed = true">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-
+    <div
+      class="collapse navbar-collapse"
+      [class.collapse]="collapsed"
+      (window:resize)="collapsed = true"
+    >
+      <ul class="navbar-nav ms-auto">
+        <li *ngIf="!user" class="nav-item">
+          <a
+            class="mb-0 ps-3 pe-3 btn btn-outline-success h6"
+            routerLinkActive="active"
+            routerLink="/auth"
+            *ngIf="!user">
+            Login
+          </a>
+        </li>
+        <li *ngIf="user" class="nav-item">
+          <span class="me-2">
+            {{ user.username }} | {{user.role}} |
+          </span>
+          <button class="btn btn-outline-danger" (click)="onLogout()">
+            Logout
+          </button>
         </li>
       </ul>
     </div>
-    <div class="navbar-right" >
-      <div *ngIf="!user" class="btn btn-outline-success"  routerLinkActive="active">
-        <a class="nav-link mb-0 h6" aria-current="page" routerLink="/auth" *ngIf="!user">Login</a>
-      </div>
-      <div class="navbar-text" *ngIf="user">
-        <span class="me-2">{{ user.username }}</span>
-        <button class="btn btn-outline-danger" (click)="onLogout()">Logout</button>
-      </div>
-    </div>
-
   </div>
 </nav>

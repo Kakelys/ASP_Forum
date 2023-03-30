@@ -1,3 +1,5 @@
+import { SectionEditComponent } from './section-list/section-edit/section-edit.component';
+import { AppIconsModule } from './app-icons.module';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,6 +14,11 @@ import { SectionComponent } from './section-list/section/section.component';
 import { AuthComponent } from './auth/auth.component';
 import { FormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from 'src/shared/loading-spinner/loading-spinner.components';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ForumListComponent } from './forum-list/forum-list.component';
+import { ForumComponent } from './forum-list/forum/forum.component';
+import { SectionNewComponent } from './section-list/section-new/section-new.component';
+import { DropdownDirective } from './section-list/section/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -20,10 +27,22 @@ import { LoadingSpinnerComponent } from 'src/shared/loading-spinner/loading-spin
     HeaderComponent,
     SectionListComponent,
     SectionComponent,
+    SectionNewComponent,
+    SectionEditComponent,
     AuthComponent,
     LoadingSpinnerComponent,
+    ForumListComponent,
+    ForumComponent,
+    DropdownDirective,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    NgbModule,
+    AppIconsModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -33,5 +52,4 @@ import { LoadingSpinnerComponent } from 'src/shared/loading-spinner/loading-spin
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

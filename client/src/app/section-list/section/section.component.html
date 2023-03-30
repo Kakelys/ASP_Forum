@@ -1,1 +1,37 @@
-<div>name: {{section.title}}</div>
+<div class="mb-3"></div>
+
+<div class="border rounded">
+  <div class="section-header rounded-top">
+    <div class="ms-3 pt-2 mb-3 d-flex">
+      <span class="align-middle mt-2 text-primary">
+        {{ section.title }}
+        <div class="d-inline" *ngIf="canEdit">
+          <div class="d-inline" ngbDropdown appDropdown>
+            <i-bs name="trash" width="1em" height="1em" class="trash-btn"></i-bs>
+            <div
+              ngbDropdownMenu
+              class="text-center"
+              style="background-color: transparent; border: 0px">
+              <button class="btn btn-danger" (click)="onClickDelete()">Are you sure?</button>
+            </div>
+          </div>
+          <i-bs
+            name="pencil-square"
+            width="1em"
+            height="1em"
+            class="edit-btn ms-1"
+            (click)="onEditToggle()"
+          ></i-bs>
+        </div>
+      </span>
+    </div>
+    <div class="container mb-2">
+      <app-section-edit [section]="section" *ngIf="editing" (onClose)="onEditToggle()"></app-section-edit>
+    </div>
+    <hr class="mt-0" />
+  </div>
+
+  <div class="container">
+    <app-forum-list [forums]="section.forums"></app-forum-list>
+  </div>
+</div>

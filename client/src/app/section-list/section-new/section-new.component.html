@@ -1,0 +1,58 @@
+<div class="d-flex">
+  <form (ngSubmit)="onSubmit(sectionNewForm)" #sectionNewForm="ngForm">
+    <div class="form-group">
+      <label for="title">Section title:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            sectionNewForm.controls.title?.invalid &&
+            sectionNewForm.controls.title?.touched
+        }"
+        ngModel
+        required
+        minlength="3"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          sectionNewForm.controls.title?.invalid &&
+          sectionNewForm.controls.title?.touched
+        "
+      >
+        <div *ngIf="sectionNewForm.controls.title?.errors?.required">Title is required</div>
+        <div *ngIf="sectionNewForm.controls.title?.errors?.minlength">Title must have at least 3 characters</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="order">Order:</label>
+      <input
+        type="number"
+        id="orderNumber"
+        name="orderNumber"
+        class="form-control"
+        [ngClass]="[{
+          'is-invalid':
+            sectionNewForm.controls.orderNumber?.invalid &&
+            sectionNewForm.controls.orderNumber?.touched
+        }]"
+        [ngModel]="0"
+        required
+        min="0"
+      />
+    </div>
+    <div class="mt-2">
+      <button class="btn btn-success me-3" [disabled]="!sectionNewForm.valid">
+        Create
+      </button>
+      <button type="button" class="btn btn-outline-danger" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+
+  </form>
+</div>

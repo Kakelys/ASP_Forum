@@ -1,0 +1,55 @@
+<div class="row mb-3 align-items-center flex-nowrap overflow-auto">
+  <div class="col-6">
+    <span class="app-link ps-2" style="font-weight: 600;">{{ forum.title }}</span>
+  </div>
+  <div class="col-1 text-center">
+    <span>
+      {{ forum.topicCount }}
+    </span>
+    <div>
+      <small style="color: gray">topics</small>
+    </div>
+  </div>
+  <div class="col-1 text-center">
+    <span>
+      {{ forum.postCount }}
+    </span>
+    <div>
+      <small style="color: gray">messages</small>
+    </div>
+  </div>
+  <div class="col">
+    <div class="container">
+      <div class="row">
+        <div class="col-3 d-flex align-items-center">
+          <div>
+            <img
+              src="https://avatarfiles.alphacoders.com/131/131209.jpg"
+              alt=""
+              width="45px"
+              class="rounded"
+              *ngIf="true"
+            />
+          </div>
+        </div>
+        <div class="col-9">
+          <div class="app-link">
+            {{ forum.lastTopic.title }}
+          </div>
+          <div>
+            <small style="color: gray">
+              Author:
+              <a class="app-link" style="color: gray">
+                {{ forum.lastTopic.author.username }}
+              </a>
+              , {{ forum.lastTopic.createDate | date }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<hr />

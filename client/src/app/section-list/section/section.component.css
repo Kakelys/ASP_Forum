@@ -1,0 +1,27 @@
+.dropdown-toggle {
+    border: 1px solid #0a0000
+}
+
+.section-header {
+    background-color: #e7f1ff;
+    font-size: 1rem;
+}
+
+
+.trash-btn {
+  cursor: pointer;
+  color: rgb(243, 131, 131);
+}
+
+.trash-btn:hover {
+  color: darkred;
+}
+
+.edit-btn {
+  cursor: pointer;
+  color: rgb(37, 37, 37);
+}
+
+.edit-btn:hover {
+  color: rgb(117, 117, 117);
+}

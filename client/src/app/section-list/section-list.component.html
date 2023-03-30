@@ -1,6 +1,21 @@
-<p>section-list works!</p>
+<div>
+  <button
+    class="btn btn-outline-primary"
+    *ngIf="canEdit"
+    (click)="onSwitchCreateMode()"
+  >
+    Create new
+  </button>
+  <app-section-new
+    *ngIf="creatingNew"
+  ></app-section-new>
+</div>
 
-<app-section *ngFor="let sectionEl of sections" [section]="sectionEl">
+<app-section
+  *ngFor="let sectionEl of sections"
+  [section]="sectionEl"
+  [canEdit]="canEdit"
+  (onDelete)="updateSections()"
+>
 </app-section>
-
-
+<br>

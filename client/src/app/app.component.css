@@ -1,0 +1,9 @@
+:host ::ng-deep .app-link {
+  font-weight: bolder;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+:host ::ng-deep .app-link:hover {
+  color: #caa732 !important;
+}

@@ -1,0 +1,59 @@
+<div class="d-flex">
+  <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)">
+    <div class="alert alert-danger alert-dismissible fade show" *ngIf="editFailed">
+      {{errorMessage}}
+    <button type="button" class="btn-close" (click)="editFailed = false"></button>
+    </div>
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            editForm.controls.title?.invalid && editForm.controls.title?.touched
+        }"
+        [ngModel]="section?.title"
+        required
+        minlength="3"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.controls.title?.invalid && editForm.controls.title.touched">
+        <div *ngIf="editForm.controls.title?.errors?.required">
+          Title is required
+        </div>
+        <div *ngIf="editForm.controls.title?.errors?.minlength">
+          Title must have at least 3 characters
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="orderNumber">Order:</label>
+      <input
+        type="number"
+        id="orderNumber"
+        name="orderNumber"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            editForm.controls.orderNumber?.invalid &&
+            editForm.controls.orderNumber?.touched
+        }"
+        [ngModel]="section?.orderNumber ?? 0"
+        required
+        min="0"
+      />
+    </div>
+    <div class="mt-2">
+      <button class="btn btn-success me-3" [disabled]="!editForm.valid">
+        Save
+      </button>
+      <button type="button" class="btn btn-outline-danger" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
