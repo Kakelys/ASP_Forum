@@ -2,6 +2,7 @@ import { AuthService } from './auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -11,6 +12,10 @@ import { Router } from '@angular/router';
 export class AuthComponent implements OnInit {
   public isLogin = true;
   public isLoading = false;
+
+  public authFailed = false;
+  public errorMessage: string;
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -26,21 +31,24 @@ export class AuthComponent implements OnInit {
     let authObs;
 
     if(this.isLogin) {
-      // TODO: mb add error handling with messagin on the page and redirct to main page
-      authObs = this.authService.login(form.value)
+      authObs = this.authService.login(form.value);
     }
     else{
-      //TODO: register
-
+      authObs = this.authService.signup(form.value);
     }
 
     authObs.subscribe({
       next: _ => {
         this.isLoading = false;
+        this.authFailed = false;
         this.router.navigate(['/main']);
+        form.reset();
+      },
+      error: err => {
+        this.isLoading = false;
+        this.authFailed = true;
+        this.errorMessage = err;
       }
     });
-
-    form.reset();
   }
 }

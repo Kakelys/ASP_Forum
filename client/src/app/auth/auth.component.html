@@ -1,5 +1,10 @@
 <div class="container d-flex align-items-center justify-content-center">
-  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
+
+  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show" *ngIf="authFailed">
+      {{errorMessage}}
+    <button type="button" class="btn-close" (click)="authFailed = false"></button>
+    </div>
     <div class="form-group">
       <label for="username">Login</label>
       <input
@@ -7,24 +12,36 @@
         id="username"
         type="text"
         class="form-control"
+        [ngClass]="{'is-invalid':authForm.controls.username?.invalid && authForm.controls.username?.touched}"
         ngModel
         name="username"
         required
         minlength="3"
+        autocomplete="on"
       />
+      <div class="invalid-feedback" *ngIf="authForm.controls.username?.invalid && authForm.controls.username?.touched">
+        <div *ngIf="authForm.controls.username?.errors?.required">Username is required</div>
+        <div *ngIf="authForm.controls.username?.errors?.minlength">Username must be at least 3 characters</div>
+      </div>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-3">
       <label for="password">Password</label>
       <input
         type="text"
         id="password"
         type="password"
         class="form-control"
+        [ngClass]="{'is-invalid':authForm.controls.password?.invalid && authForm.controls.password?.touched}"
         ngModel
         name="password"
         required
         minlength="8"
+        autocomplete="off"
       />
+      <div class="invalid-feedback" *ngIf="authForm.controls.password?.invalid && authForm.controls.password?.touched">
+        <div *ngIf="authForm.controls.password?.errors?.required">Password is required</div>
+        <div *ngIf="authForm.controls.password?.errors?.minlength">Password must be at least 8 characters</div>
+      </div>
     </div>
     <div class="mt-2">
       <button

@@ -1,14 +1,14 @@
-import { Author } from '../../shared/author.model';
+import { User } from '../../shared/user.model';
 import { AuthResponse } from '../../shared/auth-response.model';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, map, tap, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private user = new BehaviorSubject<Author>(null);
+  private user = new BehaviorSubject<User>(null);
   public $user = this.user.asObservable();
 
   private baseUrl = 'http://localhost:5100/api/v1/accounts';
@@ -17,23 +17,22 @@ export class AuthService {
 
   signup(data: { username: string; password: string }) {
     return this.http.post<AuthResponse>(this.baseUrl + '/register', data).pipe(
-      tap((res) => {
-        if (res) this.setAuth(res);
-      })
+      tap(data => this.handleAuth(data)),
+      catchError(this.handleAuthCatchError)
     );
   }
 
   login(data: { username: string; password: string }) {
     return this.http.post<AuthResponse>(this.baseUrl + '/login', data).pipe(
-      tap((res) => {
-        if (res) this.setAuth(res);
-      })
+      tap(data => this.handleAuth(data)),
+      catchError(this.handleAuthCatchError)
     );
   }
 
   autoLogin() {
     const refreshToken = localStorage.getItem('refresh-token');
-    if (!refreshToken) return;
+    if (!refreshToken)
+      return;
 
     localStorage.removeItem('access-token');
     localStorage.removeItem('refresh-token');
@@ -45,7 +44,7 @@ export class AuthService {
       .get<AuthResponse>(this.baseUrl + '/auth', { params: params })
       .pipe(
         map((data) => {
-          if (data) this.setAuth(data);
+          if (data) this.handleAuth(data);
 
           return data;
         })
@@ -58,9 +57,31 @@ export class AuthService {
     this.user.next(null);
   }
 
-  private setAuth(auth: AuthResponse) {
-    localStorage.setItem('access-token', auth.jwt.accessToken);
-    localStorage.setItem('refresh-token', auth.jwt.refreshToken);
-    this.user.next(auth.user);
+  private handleAuth(res: AuthResponse) {
+    if(!res)
+      return;
+
+    localStorage.setItem('access-token', res.jwt.accessToken);
+    localStorage.setItem('refresh-token', res.jwt.refreshToken);
+
+    this.user.next(res.user);
+  }
+
+  private handleAuthCatchError(err) {
+    if(err instanceof HttpErrorResponse) {
+      if(err.status === 500)
+        return throwError("Internal server error");
+
+      if(err.error){
+        const errMessage = err.error;
+        return throwError(errMessage);
+      }
+
+      if(err.error.errors){
+        return throwError(err.error.errors.join('\n'));
+      }
+    }
+
+    return throwError("Something went wrong");
   }
 }
