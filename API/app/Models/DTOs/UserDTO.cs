@@ -7,14 +7,14 @@ namespace app.Models.DTOs
         public AuthorDTO User {get;set;}
         public JwtDTO? Jwt { get;set; }
 
-        public UserDTO() {}
         public UserDTO(Account user, JwtDTO jwt)
         {
             User = new AuthorDTO
             {
                 Id = user.Id,
                 Username = user.Username,
-                ImagePath = user.ImagePath
+                ImagePath = user.ImagePath,
+                Role = user.Role.Name ?? Shared.Role.User
             };
             Jwt = jwt;
         }

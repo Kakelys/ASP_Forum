@@ -10,10 +10,10 @@ namespace app.Data.Implements
         {
         }
 
-        public Task<Account?> GetByNameAsync(string name, bool asTracking = true) =>
+        public Task<Account?> GetByName(string name, bool asTracking = true) =>
             FindByCondition(x => x.Username == name, asTracking).FirstOrDefaultAsync();
 
-        public Task<Account?> GetByIdAsync(int id, bool asTracking = true) =>
+        public Task<Account?> GetById(int id, bool asTracking = true) =>
             FindByCondition(x => x.Id == id, asTracking).FirstOrDefaultAsync();
 
         public async Task<Account?> GetWithRoleById(int id, bool asTracking = true) =>
@@ -26,6 +26,13 @@ namespace app.Data.Implements
             var user = await FindByCondition(x => x.Username == username, false).FirstOrDefaultAsync();    
 
             return user != null;
+        }
+
+        public async Task<Account?> GetWithRoleByName(string name, bool asTracking = true)
+        {
+            return await FindByCondition(x => x.Username == name, asTracking)
+            .Include(x => x.Role)
+            .FirstOrDefaultAsync();
         }
     }
 }

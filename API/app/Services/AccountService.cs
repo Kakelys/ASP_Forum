@@ -22,7 +22,7 @@ namespace app.Services
         }
         public async Task<UserDTO> Login(LoginDTO loginDto)
         {
-            var user = await _repository.Account.GetByNameAsync(loginDto.Username);
+            var user = await _repository.Account.GetWithRoleByName(loginDto.Username);
             if(user == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Username with such login doesn't exist");
 
@@ -57,8 +57,10 @@ namespace app.Services
             var tokenDto = await _tokenService.Generate(user.Id);
             await _tokenService.SaveNewRefreshToken(user.Id, tokenDto.RefreshToken);
 
+            var entityUser = await _repository.Account.GetWithRoleById(newUser.Id);
+
             //return UserDTO
-            return new UserDTO(newUser, tokenDto);
+            return new UserDTO(entityUser, tokenDto);
         }
 
         public async Task<UserDTO> LoginWithToken(string refreshToken)
@@ -68,7 +70,7 @@ namespace app.Services
             var token = new JwtSecurityTokenHandler().ReadJwtToken(refreshToken);
             var userId = token.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            var user = await _repository.Account.GetByIdAsync(int.Parse(userId));
+            var user = await _repository.Account.GetWithRoleById(int.Parse(userId));
             if(user == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "User doesn't exist");
 
