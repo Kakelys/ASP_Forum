@@ -25,7 +25,7 @@ namespace app.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTopic(int id)
         {
-            return Ok(_topicService.GetWithFirstPost(id));
+            return Ok(await _topicService.GetWithFirstPost(id));
         }
 
         [Authorize]

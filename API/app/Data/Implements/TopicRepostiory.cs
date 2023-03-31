@@ -12,7 +12,7 @@ namespace app.Data.Implements
             
         }
 
-        public async Task<TopicDetailDTO?> GetWithFirstPostAsync(int topicId, bool asTracking = true){
+        public async Task<TopicDetailDTO?> GetWithFirstPost(int topicId, bool asTracking = true){
             return await FindByCondition(t => t.Id == topicId, asTracking)
             .Include(t => t.Posts)
             .ThenInclude(p => p.Author)
@@ -45,10 +45,11 @@ namespace app.Data.Implements
             }).FirstOrDefaultAsync();
         }        
 
-        public async Task<IEnumerable<TopicDetailDTO>> GetByPageAsync(int page, int amountToTake, int forumId)
+        public async Task<IEnumerable<TopicDetailDTO>> GetByPage(int page, int amountToTake, int forumId)
         {
             return await context.Topics
             .AsNoTracking()
+            .Where(t => t.ForumId == forumId)
             .Include(t => t.Posts)
             .ThenInclude(p => p.Author)
             .OrderBy(t => t.IsPinned)
@@ -85,7 +86,7 @@ namespace app.Data.Implements
             }).ToListAsync();
         }
 
-        public async Task<Topic?> GetByIdAsync(int topicId, bool asTracking = true)
+        public async Task<Topic?> GetById(int topicId, bool asTracking = true)
         {
             return await context.Topics.FirstOrDefaultAsync(t => t.Id == topicId);
         }

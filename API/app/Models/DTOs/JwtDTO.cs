@@ -4,7 +4,7 @@ namespace app.Models.DTOs
 {
     public class JwtDTO
     {
-        public string AccessToken { get;set; }
+        public string? AccessToken { get;set; }
         [Required]
         public string RefreshToken { get;set; }
 

@@ -28,10 +28,10 @@ namespace app.Controllers
             return Ok(await _accountService.Login(loginDto));
         }
 
-        [HttpGet("auth")]
-        public async Task<IActionResult> AuthByToken([FromQuery] string refreshToken)
+        [HttpPost("auth")]
+        public async Task<IActionResult> AuthByToken(JwtDTO jwtDto)
         {
-            return Ok(await _accountService.LoginWithToken(refreshToken));
+            return Ok(await _accountService.LoginWithToken(jwtDto.RefreshToken));
         }    
     }
 }

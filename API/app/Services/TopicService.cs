@@ -52,7 +52,7 @@ namespace app.Services
 
         public async Task Update(int senderId, TopicDTO topicDto)
         {
-            var entity = await _repositoryManager.Topic.GetByIdAsync(topicDto.Id, true);
+            var entity = await _repositoryManager.Topic.GetById(topicDto.Id, true);
             CheckTopicIsNull(entity);
             await _permCheckerService.CheckUserPermission(senderId, entity.AuthorId, null, Shared.Role.Admin, Shared.Role.Admin);
 
@@ -69,7 +69,7 @@ namespace app.Services
 
         public async Task Delete(int senderId, int topicId)
         {
-            var entity = await _repositoryManager.Topic.GetByIdAsync(topicId, false);
+            var entity = await _repositoryManager.Topic.GetById(topicId, false);
             CheckTopicIsNull(entity);
             await _permCheckerService.CheckUserPermission(senderId, entity.AuthorId, null, Shared.Role.Admin, Shared.Role.Admin);
 
@@ -80,7 +80,7 @@ namespace app.Services
 
         public async Task<TopicDetailDTO> GetWithFirstPost(int topicId)
         {
-            var entity = await _repositoryManager.Topic.GetWithFirstPostAsync(topicId);
+            var entity = await _repositoryManager.Topic.GetWithFirstPost(topicId);
             CheckTopicIsNull(entity);
 
             return entity;
@@ -88,7 +88,7 @@ namespace app.Services
 
         public async Task<IEnumerable<TopicDetailDTO>> GetByPage(int forumId, int page, int amountToTake)
         {
-            return await _repositoryManager.Topic.GetByPageAsync(page, amountToTake, forumId);
+            return await _repositoryManager.Topic.GetByPage(page, amountToTake, forumId);
         }
 
         private void CheckTopicIsNull(object? obj)
