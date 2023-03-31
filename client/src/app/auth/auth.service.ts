@@ -37,11 +37,8 @@ export class AuthService {
     localStorage.removeItem('access-token');
     localStorage.removeItem('refresh-token');
 
-    let params = new HttpParams();
-    params = params.append('refreshToken', refreshToken);
-
     return this.http
-      .get<AuthResponse>(this.baseUrl + '/auth', { params: params })
+      .post<AuthResponse>(this.baseUrl + '/auth', {refreshToken : refreshToken})
       .pipe(
         map((data) => {
           if (data) this.handleAuth(data);

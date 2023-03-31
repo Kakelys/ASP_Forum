@@ -23,8 +23,12 @@
           sectionNewForm.controls.title?.touched
         "
       >
-        <div *ngIf="sectionNewForm.controls.title?.errors?.required">Title is required</div>
-        <div *ngIf="sectionNewForm.controls.title?.errors?.minlength">Title must have at least 3 characters</div>
+        <div *ngIf="sectionNewForm.controls.title?.errors?.required">
+          Title is required
+        </div>
+        <div *ngIf="sectionNewForm.controls.title?.errors?.minlength">
+          Title must have at least 3 characters
+        </div>
       </div>
     </div>
 
@@ -35,11 +39,11 @@
         id="orderNumber"
         name="orderNumber"
         class="form-control"
-        [ngClass]="[{
+        [ngClass]="{
           'is-invalid':
             sectionNewForm.controls.orderNumber?.invalid &&
             sectionNewForm.controls.orderNumber?.touched
-        }]"
+        }"
         [ngModel]="0"
         required
         min="0"
@@ -53,6 +57,5 @@
         Cancel
       </button>
     </div>
-
   </form>
 </div>
