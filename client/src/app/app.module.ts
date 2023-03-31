@@ -19,6 +19,7 @@ import { ForumListComponent } from './forum-list/forum-list.component';
 import { ForumComponent } from './forum-list/forum/forum.component';
 import { SectionNewComponent } from './section-list/section-new/section-new.component';
 import { DropdownDirective } from './section-list/section/dropdown.directive';
+import { HttpExceptionInterceptorService } from './http-exception-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { DropdownDirective } from './section-list/section/dropdown.directive';
     LoadingSpinnerComponent,
     ForumListComponent,
     ForumComponent,
-    DropdownDirective,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,
@@ -44,6 +45,11 @@ import { DropdownDirective } from './section-list/section/dropdown.directive';
     AppIconsModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpExceptionInterceptorService,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
