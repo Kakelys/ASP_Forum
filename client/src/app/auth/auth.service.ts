@@ -9,7 +9,7 @@ import { BehaviorSubject, map, tap, catchError, throwError } from 'rxjs';
 })
 export class AuthService {
   private user = new BehaviorSubject<User>(null);
-  public $user = this.user.asObservable();
+  public user$ = this.user.asObservable();
 
   private baseUrl = 'http://localhost:5100/api/v1/accounts';
 
@@ -17,15 +17,13 @@ export class AuthService {
 
   signup(data: { username: string; password: string }) {
     return this.http.post<AuthResponse>(this.baseUrl + '/register', data).pipe(
-      tap(data => this.handleAuth(data)),
-      catchError(this.handleAuthCatchError)
+      tap(data => this.handleAuth(data))
     );
   }
 
   login(data: { username: string; password: string }) {
     return this.http.post<AuthResponse>(this.baseUrl + '/login', data).pipe(
-      tap(data => this.handleAuth(data)),
-      catchError(this.handleAuthCatchError)
+      tap(data => this.handleAuth(data))
     );
   }
 
@@ -62,23 +60,5 @@ export class AuthService {
     localStorage.setItem('refresh-token', res.jwt.refreshToken);
 
     this.user.next(res.user);
-  }
-
-  private handleAuthCatchError(err) {
-    if(err instanceof HttpErrorResponse) {
-      if(err.status === 500)
-        return throwError("Internal server error");
-
-      if(err.error){
-        const errMessage = err.error;
-        return throwError(errMessage);
-      }
-
-      if(err.error.errors){
-        return throwError(err.error.errors.join('\n'));
-      }
-    }
-
-    return throwError("Something went wrong");
   }
 }

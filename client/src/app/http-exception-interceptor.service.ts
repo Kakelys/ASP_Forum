@@ -16,7 +16,6 @@ export class HttpExceptionInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((err) => {
-
         if (err instanceof HttpErrorResponse) {
           switch (err.status) {
             case 400:
@@ -31,7 +30,7 @@ export class HttpExceptionInterceptorService implements HttpInterceptor {
               }
 
               if (err.error) {
-                return throwError(err.message);
+                return throwError(err.error);
               }
             case 401: return throwError(err);
             case 403: return throwError("Access denied");

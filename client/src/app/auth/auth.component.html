@@ -1,10 +1,7 @@
 <div class="container d-flex align-items-center justify-content-center">
 
-  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" role="alert">
-    <div class="alert alert-danger alert-dismissible fade show" *ngIf="authFailed">
-      {{errorMessage}}
-    <button type="button" class="btn-close" (click)="authFailed = false"></button>
-    </div>
+  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" [style.display]="isLoading ? 'none' : ''" role="alert">
+    <app-alert-error [show]="authFailed" [errorMessage]="errorMessage"></app-alert-error>
     <div class="form-group">
       <label for="username">Login</label>
       <input
