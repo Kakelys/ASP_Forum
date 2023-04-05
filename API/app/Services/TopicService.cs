@@ -19,7 +19,6 @@ namespace app.Services
 
         public async Task Create(int senderId, TopicCreateDTO topicDto)
         {
-            await _repositoryManager.BeginTransactionAsync();
             var topic = new Topic
             {
                 Title = topicDto.Title,
@@ -27,27 +26,15 @@ namespace app.Services
                 AuthorId = senderId,
             };
 
-            try{
-                var entity = _repositoryManager.Topic.Create(topic);
-                await _repositoryManager.SaveAsync();
-
-                var post = new Post
-                {
-                    Content = topicDto.Content,
-                    AuthorId = senderId,
-                    TopicId = entity.Id
-                };
-
-                _repositoryManager.Post.Create(post);
-
-                await _repositoryManager.SaveAsync();
-                await _repositoryManager.CommitAsync();
-            }
-            catch(Exception ex)
+            topic.Posts.Add(new Post
             {
-                await _repositoryManager.RollbackAsync();
-                throw ex;
-            }
+                Content = topicDto.Content,
+                AuthorId = senderId,
+                TopicId = topic.Id
+            });
+
+            var entity = _repositoryManager.Topic.Create(topic);
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task Update(int senderId, TopicDTO topicDto)
